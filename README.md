@@ -8,7 +8,27 @@ El sistema sigue una arquitectura de **Middleware Centralizado**:
 * **Nodos Servidores (Ubuntu/Podman):** Ejecutan el `servidor.py` que interactúa directamente con el Kernel de Linux usando `psutil`.
 * **Middleware (Cliente Maestro):** Actúa como intermediario; descubre qué servidores están activos en la red y rutea los comandos del usuario.
 * **Protocolo:** Comunicación vía Sockets TCP/IP crudos (Puerto 5000).
-
+```mermaid
+graph TD
+    User((Usuario)) -->|Terminal| Client[Middleware / Cliente.py]
+    
+    subgraph Host: Fedora Linux
+        Client
+        
+        subgraph "Red Virtual: red-sistemas (Podman)"
+            S1[Contenedor: Servidor 1]
+            S2[Contenedor: Servidor 2]
+        end
+    end
+    
+    Client -->|1. Descubrimiento TCP| S1
+    Client -->|1. Descubrimiento TCP| S2
+    
+    Client -->|2. Envía Comando| S1
+    Client -->|2. Envía Comando| S2
+    
+    S1 -->|psutil| Kernel[(Kernel Linux)]
+    S2 -->|psutil| Kernel
 ## 3. Descripción de Módulos
 * **`gestor.py`:** Clase `GestorProcesos`. Encapsula la lógica de sistema (uso de CPU, gestión de PIDs).
 * **`servidor.py`:** Maneja la concurrencia con `threading` y expone las funciones del gestor a la red.
