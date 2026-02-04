@@ -29,7 +29,7 @@ graph TD
     
     S1 -->|psutil| Kernel[(Kernel Linux)]
     S2 -->|psutil| Kernel
-´´´
+```
 ## 3. Descripción de Módulos
 * **`gestor.py`:** Clase `GestorProcesos`. Encapsula la lógica de sistema (uso de CPU, gestión de PIDs).
 * **`servidor.py`:** Maneja la concurrencia con `threading` y expone las funciones del gestor a la red.
